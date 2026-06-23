@@ -13,6 +13,12 @@ export function useDraft(key, initialValue) {
     let isMounted = true;
     const fetchData = async () => {
       try {
+        if (key.endsWith('_31')) {
+          const item = window.localStorage.getItem(key);
+          if (item && isMounted) setValue(JSON.parse(item));
+          return;
+        }
+
         const docRef = doc(db, 'evaluations', key);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists() && isMounted) {
@@ -42,8 +48,10 @@ export function useDraft(key, initialValue) {
         return;
       }
       try {
-        const docRef = doc(db, 'evaluations', key);
-        await setDoc(docRef, { value }, { merge: true });
+        if (!key.endsWith('_31')) {
+          const docRef = doc(db, 'evaluations', key);
+          await setDoc(docRef, { value }, { merge: true });
+        }
         window.localStorage.setItem(key, JSON.stringify(value));
       } catch (error) {
         console.warn(`Error setting Firestore key "${key}":`, error);

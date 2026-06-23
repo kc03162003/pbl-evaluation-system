@@ -7,7 +7,13 @@ export default function Login({ onLogin, studentsList }) {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const student = studentsList.find(s => s.id === parseInt(seatNum));
+    let student = studentsList.find(s => s.id === parseInt(seatNum));
+    
+    // Test account override
+    if (parseInt(seatNum) === 31) {
+      student = { id: 31, group: 6, isTestAccount: true };
+    }
+
     if (student) {
       onLogin(student);
     } else {

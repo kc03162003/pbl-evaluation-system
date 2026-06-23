@@ -45,9 +45,16 @@ function App() {
   const checkCompletedLevels = async (userId) => {
     let completed = [];
     try {
-      const status = await getUserStatus(userId);
-      if (status && status.completedLevels) {
-        completed = status.completedLevels;
+      if (userId !== 31) {
+        const status = await getUserStatus(userId);
+        if (status && status.completedLevels) {
+          completed = status.completedLevels;
+        }
+      } else {
+        // Test account relies solely on localStorage for completed status in this session
+        if (localStorage.getItem(`level1_31_submitted`)) completed.push(1);
+        if (localStorage.getItem(`level2_31_submitted`)) completed.push(2);
+        if (localStorage.getItem(`level3_31_submitted`)) completed.push(3);
       }
     } catch(e) {}
     
@@ -68,6 +75,14 @@ function App() {
 
   const handleLogout = () => {
     if (confirm('確定要登出嗎？未送出的草稿會自動保留喔！')) {
+      if (currentUser?.isTestAccount) {
+        // Clear all local storage for test account
+        Object.keys(localStorage).forEach(key => {
+          if (key.includes('_31')) {
+            localStorage.removeItem(key);
+          }
+        });
+      }
       setCurrentUser(null);
       localStorage.removeItem('currentUser');
       setCurrentView('dashboard');
@@ -77,7 +92,13 @@ function App() {
   const handleSubmitLevel = async (levelId, data) => {
     const newCompleted = [...new Set([...completedLevels, levelId])];
     setCompletedLevels(newCompleted);
-    await saveUserStatus(currentUser.id, { completedLevels: newCompleted });
+    
+    if (currentUser?.isTestAccount) {
+      localStorage.setItem(`level${levelId}_31_submitted`, 'true');
+    } else {
+      await saveUserStatus(currentUser.id, { completedLevels: newCompleted });
+    }
+    
     setCurrentView('dashboard');
   };
 
