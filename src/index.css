@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ff9800; /* Orange 500 */
+  --color-primary-light: #ffb74d; /* Orange 300 */
+  --color-primary-dark: #f57c00; /* Orange 700 */
+  
+  --color-secondary: #0ea5e9; /* Sky 500 */
+  --color-secondary-light: #38bdf8; /* Sky 400 */
+  --color-secondary-dark: #0284c7; /* Sky 600 */
+  
+  --color-bg-base: #fffbeb; /* Amber 50 */
+}
+
+@layer utilities {
+  .shake-error {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    border-color: #ef4444 !important;
+    background-color: #fef2f2 !important;
+  }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+body {
+  background-color: var(--color-bg-base);
+  font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #334155;
+}
+
+/* Custom Scrollbar for a more app-like feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
