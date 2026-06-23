@@ -39,7 +39,7 @@ export default function Login({ onLogin, studentsList }) {
                 setSeatNum(e.target.value);
                 setError('');
               }}
-              placeholder="請輸入座號 (1-31)"
+              placeholder="請輸入座號 (1-30)"
               className="w-full text-center text-3xl font-bold py-4 rounded-2xl border-4 border-slate-200 focus:border-orange-400 focus:ring-0 outline-none transition-colors placeholder:text-slate-300"
               autoFocus
             />
