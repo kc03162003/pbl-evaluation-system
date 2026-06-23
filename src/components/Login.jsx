@@ -33,13 +33,13 @@ export default function Login({ onLogin, studentsList }) {
             <input
               type="number"
               min="1"
-              max="30"
+              max="31"
               value={seatNum}
               onChange={(e) => {
                 setSeatNum(e.target.value);
                 setError('');
               }}
-              placeholder="請輸入座號 (1-30)"
+              placeholder="請輸入座號 (1-31)"
               className="w-full text-center text-3xl font-bold py-4 rounded-2xl border-4 border-slate-200 focus:border-orange-400 focus:ring-0 outline-none transition-colors placeholder:text-slate-300"
               autoFocus
             />
