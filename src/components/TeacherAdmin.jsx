@@ -43,7 +43,7 @@ export default function TeacherAdmin({ onClose, globalStudentsList, setGlobalStu
   const getCalculatedScores = (studentId) => {
     const student = studentsList.find(s => s.id === studentId);
     if (!student) return null;
-    const data = rawData.find(d => d.student.id === studentId);
+    const data = rawData.find(d => d.student.id === studentId) || { student, l1: null, l2: null, l3: null };
     
     // 1. Self Eval (Convert to 100 scale)
     let selfRaw = 0;
