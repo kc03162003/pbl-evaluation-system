@@ -15,23 +15,33 @@ export function useDraft(key, initialValue) {
       try {
         if (key.endsWith('_31')) {
           const item = window.localStorage.getItem(key);
-          if (item && isMounted) setValue(JSON.parse(item));
+          if (item && isMounted) {
+            const parsed = JSON.parse(item);
+            setValue(parsed !== null ? parsed : initialValue);
+          }
           return;
         }
 
         const docRef = doc(db, 'evaluations', key);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists() && isMounted) {
-          setValue(docSnap.data().value);
+          const dataVal = docSnap.data().value;
+          setValue(dataVal !== null ? dataVal : initialValue);
         } else {
           // Fallback to localStorage if no cloud data
           const item = window.localStorage.getItem(key);
-          if (item && isMounted) setValue(JSON.parse(item));
+          if (item && isMounted) {
+            const parsed = JSON.parse(item);
+            setValue(parsed !== null ? parsed : initialValue);
+          }
         }
       } catch (error) {
         console.warn(`Error reading Firestore key "${key}":`, error);
         const item = window.localStorage.getItem(key);
-        if (item && isMounted) setValue(JSON.parse(item));
+        if (item && isMounted) {
+          const parsed = JSON.parse(item);
+          setValue(parsed !== null ? parsed : initialValue);
+        }
       } finally {
         if (isMounted) setIsLoaded(true);
       }

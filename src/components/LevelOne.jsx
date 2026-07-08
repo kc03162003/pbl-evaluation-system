@@ -95,12 +95,12 @@ export default function LevelOne({ currentUser, onBack, onSubmit }) {
     selfBadge: ""
   });
 
-  const safeScores = Array.isArray(draft.scores) 
+  const safeScores = Array.isArray(draft?.scores) 
     ? [...draft.scores, ...Array(Math.max(0, QUESTIONS.length - draft.scores.length)).fill(null)].slice(0, QUESTIONS.length)
     : Array(QUESTIONS.length).fill(null);
-  const safeRef1 = draft.reflection1 !== undefined ? draft.reflection1 : (draft.reflection || "");
-  const safeRef2 = draft.reflection2 !== undefined ? draft.reflection2 : "";
-  const safeSelfBadge = draft.selfBadge !== undefined ? draft.selfBadge : "";
+  const safeRef1 = draft?.reflection1 !== undefined ? draft.reflection1 : (draft?.reflection || "");
+  const safeRef2 = draft?.reflection2 !== undefined ? draft.reflection2 : "";
+  const safeSelfBadge = draft?.selfBadge !== undefined ? draft.selfBadge : "";
   const [errors, setErrors] = useState({});
   const [showConfirm, setShowConfirm] = useState(false);
   
@@ -112,19 +112,19 @@ export default function LevelOne({ currentUser, onBack, onSubmit }) {
   const handleScoreChange = (index, val) => {
     const newScores = [...safeScores];
     newScores[index] = val;
-    setDraft({ ...draft, scores: newScores, reflection1: safeRef1, reflection2: safeRef2, selfBadge: safeSelfBadge });
+    setDraft({ ...(draft || {}), scores: newScores, reflection1: safeRef1, reflection2: safeRef2, selfBadge: safeSelfBadge });
     if (errors[`q${index}`]) setErrors({ ...errors, [`q${index}`]: false });
   };
 
   const handleReflection1Change = (e) => {
-    setDraft({ ...draft, scores: safeScores, reflection2: safeRef2, selfBadge: safeSelfBadge, reflection1: e.target.value });
+    setDraft({ ...(draft || {}), scores: safeScores, reflection2: safeRef2, selfBadge: safeSelfBadge, reflection1: e.target.value });
     if (errors.reflection1 && e.target.value.length >= 5) {
       setErrors({ ...errors, reflection1: false });
     }
   };
 
   const handleReflection2Change = (e) => {
-    setDraft({ ...draft, scores: safeScores, reflection1: safeRef1, selfBadge: safeSelfBadge, reflection2: e.target.value });
+    setDraft({ ...(draft || {}), scores: safeScores, reflection1: safeRef1, selfBadge: safeSelfBadge, reflection2: e.target.value });
     if (errors.reflection2 && e.target.value.length >= 5) {
       setErrors({ ...errors, reflection2: false });
     }
@@ -231,7 +231,7 @@ export default function LevelOne({ currentUser, onBack, onSubmit }) {
               <select
                 value={safeSelfBadge}
                 onChange={(e) => {
-                  setDraft({ ...draft, scores: safeScores, reflection1: safeRef1, reflection2: safeRef2, selfBadge: e.target.value });
+                  setDraft({ ...(draft || {}), scores: safeScores, reflection1: safeRef1, reflection2: safeRef2, selfBadge: e.target.value });
                   if (errors.selfBadge) setErrors({ ...errors, selfBadge: false });
                 }}
                 className={`w-full text-lg p-4 rounded-xl border-2 outline-none font-bold ${errors.selfBadge ? 'border-red-400 bg-red-50' : 'border-slate-300 focus:border-sky-500 bg-white'}`}

@@ -48,3 +48,12 @@ export const getAllEvaluations = async () => {
   });
   return data;
 };
+
+export const getAllUserStatuses = async () => {
+  const snapshot = await getDocs(collection(db, 'userStatus'));
+  const data = {};
+  snapshot.forEach(doc => {
+    data[doc.id] = doc.data();
+  });
+  return data;
+};

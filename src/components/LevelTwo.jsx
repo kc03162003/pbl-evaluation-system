@@ -15,9 +15,10 @@ const SCORES = [3, 4, 5];
 
 export default function LevelTwo({ currentUser, onBack, onSubmit, studentsList }) {
   const groupMembers = useMemo(() => {
-    return studentsList
-      .filter(s => s.group === currentUser.group && s.id !== currentUser.id)
-      .sort((a, b) => a.id - b.id);
+    const groupMembersRaw = studentsList.filter(s => parseInt(s.group) === parseInt(currentUser.group) && s.id !== currentUser.id);
+    const uniqueMembersMap = new Map();
+    groupMembersRaw.forEach(m => uniqueMembersMap.set(String(m.id), m));
+    return Array.from(uniqueMembersMap.values()).sort((a, b) => a.id - b.id);
   }, [currentUser, studentsList]);
 
   const [draft, setDraft] = useDraft(`level2_${currentUser.id}`, {
@@ -33,10 +34,25 @@ export default function LevelTwo({ currentUser, onBack, onSubmit, studentsList }
   const mvpRef = useRef(null);
 
   const handlePeerChange = (id, field, value) => {
-    const newEvals = draft.peerEvals.map(pe => 
-      pe.id === id ? { ...pe, [field]: value } : pe
-    );
-    setDraft({ ...draft, peerEvals: newEvals });
+    setDraft(prevDraft => {
+      const currentEvals = Array.isArray(prevDraft?.peerEvals) ? prevDraft.peerEvals : [];
+      
+      const newEvals = groupMembers.map(member => {
+        const existingEvals = currentEvals.filter(pe => pe && String(pe.id) === String(member.id));
+        // Merge duplicates if any exist
+        let mergedExisting = {};
+        existingEvals.forEach(pe => {
+          mergedExisting = { ...mergedExisting, ...pe };
+        });
+
+        if (String(member.id) === String(id)) {
+          return { id: member.id, badge1: "", score1: "", badge2: "", score2: "", moment: "", ...mergedExisting, [field]: value };
+        }
+        return { id: member.id, badge1: "", score1: "", badge2: "", score2: "", moment: "", ...mergedExisting };
+      });
+
+      return { ...(prevDraft || {}), peerEvals: newEvals };
+    });
     
     // Clear error
     const key = `peer_${id}_${field}`;
@@ -49,22 +65,24 @@ export default function LevelTwo({ currentUser, onBack, onSubmit, studentsList }
     let newErrors = {};
     let firstErrorRef = null;
 
-    draft.peerEvals.forEach(pe => {
+    groupMembers.forEach(member => {
+      const evalArray = Array.isArray(draft?.peerEvals) ? draft.peerEvals : [];
+      const pe = evalArray.find(p => p && String(p?.id) === String(member.id)) || { badge1: "", score1: "", badge2: "", score2: "", moment: "" };
       if (!pe.badge1) {
-        newErrors[`peer_${pe.id}_badge1`] = true;
-        if (!firstErrorRef) firstErrorRef = peerRefs.current[pe.id];
+        newErrors[`peer_${member.id}_badge1`] = true;
+        if (!firstErrorRef) firstErrorRef = peerRefs.current[member.id];
       }
       if (!pe.score1) {
-        newErrors[`peer_${pe.id}_score1`] = true;
-        if (!firstErrorRef) firstErrorRef = peerRefs.current[pe.id];
+        newErrors[`peer_${member.id}_score1`] = true;
+        if (!firstErrorRef) firstErrorRef = peerRefs.current[member.id];
       }
       if (pe.badge2 && !pe.score2) {
-        newErrors[`peer_${pe.id}_score2`] = true;
-        if (!firstErrorRef) firstErrorRef = peerRefs.current[pe.id];
+        newErrors[`peer_${member.id}_score2`] = true;
+        if (!firstErrorRef) firstErrorRef = peerRefs.current[member.id];
       }
       if (pe.moment.trim().length < 5) {
-        newErrors[`peer_${pe.id}_moment`] = true;
-        if (!firstErrorRef) firstErrorRef = peerRefs.current[pe.id];
+        newErrors[`peer_${member.id}_moment`] = true;
+        if (!firstErrorRef) firstErrorRef = peerRefs.current[member.id];
       }
     });
 
@@ -99,7 +117,8 @@ export default function LevelTwo({ currentUser, onBack, onSubmit, studentsList }
 
         <div className="space-y-12">
           {groupMembers.map((member, index) => {
-            const evalData = draft.peerEvals.find(pe => pe.id === member.id) || { badge1: "", score1: "", badge2: "", score2: "", moment: "" };
+            const currentEvals = Array.isArray(draft?.peerEvals) ? draft.peerEvals : [];
+            const evalData = currentEvals.find(pe => pe && String(pe.id) === String(member.id)) || { badge1: "", score1: "", badge2: "", score2: "", moment: "" };
             const hasError = errors[`peer_${member.id}_badge1`] || errors[`peer_${member.id}_score1`] || errors[`peer_${member.id}_score2`] || errors[`peer_${member.id}_moment`];
             
             return (
@@ -188,9 +207,9 @@ export default function LevelTwo({ currentUser, onBack, onSubmit, studentsList }
             
             <div className="space-y-6">
               <select
-                value={draft.mvpId}
+                value={draft?.mvpId || ""}
                 onChange={(e) => {
-                  setDraft({ ...draft, mvpId: e.target.value });
+                  setDraft(prev => ({ ...(prev || {}), mvpId: e.target.value }));
                   if (errors.mvpId) setErrors({ ...errors, mvpId: false });
                 }}
                 className={`w-full text-xl p-4 rounded-xl border-2 outline-none font-bold ${errors.mvpId ? 'border-red-400 bg-red-50' : 'border-emerald-400 focus:border-emerald-600 bg-white'}`}
@@ -202,9 +221,9 @@ export default function LevelTwo({ currentUser, onBack, onSubmit, studentsList }
               <div>
                 <label className="block text-xl font-bold text-emerald-800 mb-3">想對他說的一句感謝：</label>
                 <textarea
-                  value={draft.mvpThanks}
+                  value={draft?.mvpThanks || ""}
                   onChange={(e) => {
-                    setDraft({ ...draft, mvpThanks: e.target.value });
+                    setDraft(prev => ({ ...(prev || {}), mvpThanks: e.target.value }));
                     if (errors.mvpThanks && e.target.value.length >= 5) setErrors({ ...errors, mvpThanks: false });
                   }}
                   placeholder="謝謝你總是..."
