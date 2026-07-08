@@ -233,7 +233,7 @@ export default function TeacherAdmin({ onClose, globalStudentsList, setGlobalStu
           "自評-4.簡報討論(1~5分)": data.l1?.scores?.[3] ?? '',
           "自評-5.簡報製作(1~5分)": data.l1?.scores?.[4] ?? '',
           "自評-6.口頭報告(1~5分)": data.l1?.scores?.[5] ?? '',
-          "自評-7.解謎與活動(1~5分)": data.l1?.scores?.[6] ?? '',
+          "自評-7.解謎活動(1~5分)": data.l1?.scores?.[6] ?? '',
           "自評文字-最喜歡的部分": data.l1?.reflection1 || '',
           "自評文字-學到的能力": data.l1?.reflection2 || '',
           "他評(輸入)-組內互評紀錄(給予組員之徽章/分數/閃光時刻)": peerGivenList || '無',
@@ -518,7 +518,7 @@ export default function TeacherAdmin({ onClose, globalStudentsList, setGlobalStu
 
                       const qTitles = [
                         "1. 資料蒐集", "2. 資料整理", "3. 小組討論",
-                        "4. 簡報討論", "5. 簡報製作", "6. 口頭報告", "7. 解謎與活動"
+                        "4. 簡報討論", "5. 簡報製作", "6. 口頭報告", "7. 解謎活動"
                       ];
 
                       return (

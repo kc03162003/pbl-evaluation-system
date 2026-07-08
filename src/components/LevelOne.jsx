@@ -65,7 +65,7 @@ const QUESTIONS = [
     ]
   },
   {
-    title: "7. 解謎與活動(堅守岡位、機動支援)",
+    title: "7. 解謎活動(堅守岡位、機動支援)",
     options: [
       { val: 5, label: "5分 積極用心" },
       { val: 4, label: "4分 表現良好" },
