@@ -227,7 +227,7 @@ export default function TeacherAdmin({ onClose, globalStudentsList, setGlobalStu
           "MVP得票數": scores.mvpCount,
           "自給勳章": scores.selfBadge,
           "自評原始總分(滿分35)": scores.selfRaw,
-          "自評-1.資料蒐集整理(1~5分)": data.l1?.scores?.[0] ?? '',
+          "自評-1.資料蒐集(1~5分)": data.l1?.scores?.[0] ?? '',
           "自評-2.資料整理(1~5分)": data.l1?.scores?.[1] ?? '',
           "自評-3.小組討論(1~5分)": data.l1?.scores?.[2] ?? '',
           "自評-4.簡報討論(1~5分)": data.l1?.scores?.[3] ?? '',
@@ -517,7 +517,7 @@ export default function TeacherAdmin({ onClose, globalStudentsList, setGlobalStu
                       const scores = getCalculatedScores(student.id) || {};
 
                       const qTitles = [
-                        "1. 資料蒐集整理", "2. 資料整理", "3. 小組討論",
+                        "1. 資料蒐集", "2. 資料整理", "3. 小組討論",
                         "4. 簡報討論", "5. 簡報製作", "6. 口頭報告", "7. 解謎與活動"
                       ];
 

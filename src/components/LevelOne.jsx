@@ -5,7 +5,7 @@ import { BADGES } from './LevelTwo';
 
 const QUESTIONS = [
   {
-    title: "1. 資料蒐集整理(使用可信來源、整理內容資訊)",
+    title: "1. 資料蒐集(使用可信來源、整理內容資訊)",
     options: [
       { val: 5, label: "5分 積極用心" },
       { val: 4, label: "4分 表現良好" },
