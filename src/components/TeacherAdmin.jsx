@@ -8,7 +8,7 @@ export default function TeacherAdmin({ onClose, globalStudentsList, setGlobalStu
   const [authenticated, setAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
 
-  const [settings, setSettings] = useState({ selfWeight: 30, peerWeight: 20, teacherWeight: 50, mvpPoints: 1, starPoints: 2 });
+  const [settings, setSettings] = useState({ selfWeight: 30, peerWeight: 20, teacherWeight: 50, mvpPoints: 1, starPoints: 2, studentPassword: 'c1723' });
   const [teacherScores, setTeacherScores] = useState({});
   const [studentsList, setStudentsList] = useState(globalStudentsList || []);
   const [rawData, setRawData] = useState([]);
@@ -977,6 +977,16 @@ export default function TeacherAdmin({ onClose, globalStudentsList, setGlobalStu
                         value={settings.starPoints} 
                         onChange={(e) => setSettings({...settings, starPoints: e.target.value})}
                         className="w-24 text-center text-xl font-bold p-3 rounded-xl border-2 border-slate-300 focus:border-sky-500 outline-none"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between border-b-2 border-slate-50 pb-4">
+                      <label className="text-xl font-bold text-slate-700">學生首頁登入密碼</label>
+                      <input 
+                        type="text" 
+                        value={settings.studentPassword || 'c1723'} 
+                        onChange={(e) => setSettings({...settings, studentPassword: e.target.value})}
+                        className="w-32 text-center text-xl font-bold p-3 rounded-xl border-2 border-slate-300 focus:border-sky-500 outline-none"
                       />
                     </div>
 

@@ -17,6 +17,7 @@ function App() {
   const [completedLevels, setCompletedLevels] = useState([]);
   const [showTeacherAdmin, setShowTeacherAdmin] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [adminSettings, setAdminSettings] = useState(null);
 
   // Check login state and fetch initial data
   useEffect(() => {
@@ -25,6 +26,9 @@ function App() {
         const adminData = await getAdminData();
         if (adminData?.studentsList) {
           setStudentsList(adminData.studentsList);
+        }
+        if (adminData?.settings) {
+          setAdminSettings(adminData.settings);
         }
         
         const savedUser = localStorage.getItem('currentUser');
@@ -109,7 +113,7 @@ function App() {
   if (!currentUser) {
     return (
       <>
-        <Login onLogin={handleLogin} studentsList={studentsList} />
+        <Login onLogin={handleLogin} studentsList={studentsList} adminSettings={adminSettings} />
         {/* Hidden Admin Button */}
         <button 
           onClick={() => setShowTeacherAdmin(true)}
